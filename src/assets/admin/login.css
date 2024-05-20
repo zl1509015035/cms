@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.dr-login{
+    /* 弹性布局 */
+    display: flex;
+    /* 水平居中 */
+    justify-content: center;
+    /*  垂直居中*/
+    align-items: center;
+    height: 100vh;
+}
+
+.dr-login .el-form{
+    width: 360px;
+    height: 230px;
+    /* 背景色 */
+    background: #fff;
+    /* 阴影 */
+    box-shadow: 0 0 15px #60b4ec;
+}
+
+.dr-login .el-form .title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    font-size: 25px;
+    /** 加粗 **/
+    font-weight: bold;
+    color: #1e9eff
+}
+
+.dr-login .el-form .el-form-item{
+    margin-left: 30px;
+    width: 300px;
+}
+
+.dr-login .el-form .el-button{
+    width: 300px;
+}
