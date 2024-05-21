@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAdminStore } from "@/stores/admin/admin.js";
+import TimeUtil from "@/Utils/TimeUtil.js";
 
 const routes = [
   {
@@ -56,6 +57,15 @@ router.beforeEach((to, from, next) => {
 
       router.push("/login");
     }
+
+    let startTime = "2024-05-21 11:30:00"
+    let endTime = "2024-05-21 22:00:00"
+
+    let timeSubResult = TimeUtil.timeSub(startTime,endTime)
+
+    console.log("timeSubResult:",timeSubResult)
+
+
     next();
   } else {
     console.log("不需要身份验证");
