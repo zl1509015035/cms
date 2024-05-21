@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
+import {ElMessage} from "element-plus";
 import { useAdminStore } from "@/stores/admin/admin.js";
 import TimeUtil from "@/Utils/TimeUtil.js";
+import LocalJW from "@/Utils/LocalJW";
 
 const routes = [
   {
@@ -65,6 +67,13 @@ router.beforeEach((to, from, next) => {
 
     console.log("timeSubResult:",timeSubResult)
 
+    if(timeSubResult.expire){
+      ElMessage.error("登录已过期,请重新登录")
+
+      LocalJW.remove("admin")
+
+      router.push("/login")
+    }
 
     next();
   } else {
