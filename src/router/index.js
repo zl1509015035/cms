@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAdminStore } from "@/stores/admin/admin.js";
 
 const routes = [
-    {
-        path: "/",// http://localhost:5173/login
-        //重定向
-        redirect:"/admin"
-      },
+  {
+    path: "/", // http://localhost:5173/login
+    //重定向
+    redirect: "/admin",
+  },
   {
     path: "/login",
     // component:() => import("../views/admin/login.vue")
@@ -18,6 +18,22 @@ const routes = [
     component: () => import("@/views/admin/home.vue"),
     //身份校验
     meta: { requiresAuth: true },
+    children: [
+      //管理员
+      {
+        path: "administrator/add", // http://localhost:5173/admin/administrator/add
+        component: () => import("@/views/admin/administrator/add.vue"),
+      },
+      {
+        path: "administrator/list", // http://localhost:5173/admin/administrator/list
+        component: () => import("@/views/admin/administrator/list.vue"),
+      },
+      //类别管理
+      {
+        path: "category/list", // http://localhost:5173/admin/category/list
+        component: () => import("@/views/admin/category/list.vue"),
+      },
+    ],
   },
 ];
 
@@ -26,26 +42,25 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to,from,next) =>{
-    // console.log(to.meta.requiresAuth)
-    if(to.meta.requiresAuth){
-        console.log("需要身份验证");
-        //从pinia中拿出状态判断
+router.beforeEach((to, from, next) => {
+  // console.log(to.meta.requiresAuth)
+  if (to.meta.requiresAuth) {
+    console.log("需要身份验证");
+    //从pinia中拿出状态判断
 
-        //初始化
-        const adminStore = useAdminStore()
+    //初始化
+    const adminStore = useAdminStore();
 
-        if(adminStore.data.token === "" ){
-            console.log("未登录")
+    if (adminStore.data.token === "") {
+      console.log("未登录");
 
-            router.push("/login")
-        }
-        next()
-
-    }else{
-        console.log("不需要身份验证");
-        next()
+      router.push("/login");
     }
-})
+    next();
+  } else {
+    console.log("不需要身份验证");
+    next();
+  }
+});
 
 export default router;

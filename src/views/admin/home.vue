@@ -1,10 +1,9 @@
 <script setup>
 import '@/assets/admin/css/home.css'
+import HomeSide from '@/components/admin/home/HomeSide.vue'
 </script>
 
 <template>
-    <h3>后台</h3>
-
     <div class="dr-home">
 
         <div class="header">
@@ -12,12 +11,10 @@ import '@/assets/admin/css/home.css'
         </div>
 
         <div class="main">
-            <div class="side">
-
-            </div>
+            <HomeSide />
 
             <dic class="content">
-
+                <router-view />
             </dic>
         </div>
     </div>
