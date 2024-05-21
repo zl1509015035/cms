@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-size:14px;
+}
+
+a{
+    outline:none;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+ul,li{
+    list-style-type: none;
+}
+
+/* .dr-home */
+.dr-home {
+    display: flex;
+    /* 容器内的元素从上至下排列 */
+    flex-direction: column; 
+    height: 100vh;
+}
+
+/* .dr-home .header */
+.dr-home .header {
+    display: flex;
+    height: 55px;
+    background: #393d49;
+}
+
+/* .dr-home .main */
+.dr-home .main {
+    display: flex;
+    /* 减去 header 高度 */
+    height: calc(100vh - 55px); 
+}
+
+.dr-home .main .side {
+    width: 200px;
+    background: #545c64;
+}
+
+.dr-home .main .content {
+    padding: 5px;
+    flex: 1;
+    overflow-y: auto;
+}

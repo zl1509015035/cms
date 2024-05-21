@@ -1,10 +1,18 @@
 <script setup>
 
-import '@/assets/admin/login.css'
+import '@/assets/admin/css/login.css'
+import axios from 'axios'
 import {reactive, ref} from 'vue'
 import {ElMessage} from 'element-plus';
-import axios from 'axios'
+import { User,Lock } from '@element-plus/icons-vue' //图标
+import { useAdminStore } from '@/stores/admin/admin.js';
+import { useRouter } from 'vue-router';
 
+//初始化
+const adminStore = useAdminStore()
+const router = useRouter()
+
+//数据
 const data = reactive({
   name: '',
   password: '',
@@ -50,6 +58,14 @@ const login = () => {
       //将json字符串转换位对象
       let payloadObj = JSON.parse(payload)
       console.log("payloadObj:", payloadObj);
+
+    //管理员状态存储pinia（持久化存储到localStorage中）
+    adminStore.save(payloadObj.name,token,payloadObj.expireDate)
+
+    console.log(adminStore.data);
+
+    //跳转至后台
+    router.push("/admin")
 
     }).catch(err => {
       console.log("err:", err)
