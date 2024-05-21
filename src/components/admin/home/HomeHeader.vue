@@ -1,14 +1,17 @@
 <script setup>
 import { useAdminStore } from '@/stores/admin/admin';
+import {useRouter} from 'vue-router';
 import LocalJW from '@/Utils/LocalJW.js';
 
 console.log(LocalJW.get("admin"));
 
 const adminStore = useAdminStore()
+const router = useRouter()
 
 const logout = () =>{
+  LocalJW.remove("admin")
 
-
+  router.push("/login")
 }
 </script>
 

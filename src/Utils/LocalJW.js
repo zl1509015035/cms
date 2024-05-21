@@ -7,7 +7,7 @@ const set = (key,value) =>{
 }
 
 
-const remove = () =>{
+const remove = (key) =>{
     localStorage.removeItem(key)
 }
 
