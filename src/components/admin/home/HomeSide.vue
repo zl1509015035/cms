@@ -8,9 +8,7 @@
     <el-menu router background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
         <el-sub-menu index="admin">
             <template #title>
-                <el-icon>
-                    <UserFilled />
-                </el-icon>管理员
+                <el-icon><UserFilled /></el-icon>管理员
             </template>
 
             <el-menu-item-group>
