@@ -1,5 +1,15 @@
 <script setup>
+import { useAdminStore } from '@/stores/admin/admin';
+import LocalJW from '@/Utils/LocalJW.js';
 
+console.log(LocalJW.get("admin"));
+
+const adminStore = useAdminStore()
+
+const logout = () =>{
+
+
+}
 </script>
 
 <template>
@@ -17,10 +27,10 @@
         <div class="info">
             <div class="admin">
                 <div class="name">
-                    <span>JW</span><el-icon><Bell/></el-icon>
+                    <span>{{ adminStore.data.name }}</span><el-icon><Bell/></el-icon>
                 </div>
 
-                <div class="exit">
+                <div class="exit" @click="logout">
                     退出
                 </div>
             </div>
