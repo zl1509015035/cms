@@ -120,3 +120,16 @@ li {
   flex: 1;
   overflow-y: auto;
 }
+
+
+/* 重写 ElementPlus 默认样式 */
+/* 表格 */
+.el-table {
+    margin-top: 7px;
+    width: 1000px;
+}
+
+/* 面包屑 */
+.el-breadcrumb {
+    margin-bottom: 7px;
+}
