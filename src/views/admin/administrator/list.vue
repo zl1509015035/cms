@@ -1,12 +1,26 @@
 <script setup>
 import {reactive} from "vue";
+import AxiosUtil from "@/Utils/AxiosUtil.js";
+import {ElMessage} from "element-plus";
 
 
 const data = reactive({
-  list:[
-    {id:'1',name:"卷王",email:'',remark:'juwangcode.com',create_time:'2024-05-26'},
-    {id:'2',name:"juwanKing",email:'king',remark:'juanKingcode.com',create_time:'2024-05-26'}
-  ]
+  list:[]
+})
+
+
+AxiosUtil.get('/api/adm/list').then(result =>{
+
+  console.log(result)
+
+  if(!result.status){
+    ElMessage.error(result.msg)
+    return
+  }
+
+  data.list = result.data.list
+}).catch(err =>{
+  console.log("err:",err)
 })
 </script>
 

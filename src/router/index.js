@@ -63,6 +63,9 @@ router.beforeEach((to, from, next) => {
     let startTime = "2024-05-21 11:30:00"
     let endTime = "2024-05-21 22:00:00"
 
+    /*let startTime = TimeUtil.now()
+    let endTime = adminStore.data.expireDate*/
+
     let timeSubResult = TimeUtil.timeSub(startTime,endTime)
 
     console.log("timeSubResult:",timeSubResult)
