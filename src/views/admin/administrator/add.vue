@@ -1,6 +1,9 @@
 <script setup>
 
 import {reactive} from "vue";
+import {ElMessage} from "element-plus";
+import AxiosUtil from "@/Utils/AxiosUtil.js";
+import TimeUtil from "@/Utils/TimeUtil.js";
 
 const data = reactive({
   name:'',
@@ -12,6 +15,34 @@ const data = reactive({
 
 const add = () =>{
   console.log(data)
+
+if(data.name == '') {
+  ElMessage.error("姓名不能为空！")
+  return
+}
+if(data.password == '') {
+  ElMessage.error("密码不能为空！")
+  return
+}
+
+data.create_time = TimeUtil.now()
+
+AxiosUtil.post('/api/adm/add',data)
+    .then(result => {
+      console.log(result)
+    if(!result.status){
+      ElMessage.error(result.msg)
+      return
+    }
+      ElMessage.success("添加成功")
+    }).catch(err =>{
+      console.error("添加管理员用户失败:",err)
+})
+
+
+
+
+
 }
 
 const reset = () =>{

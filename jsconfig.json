@@ -1,3 +1,4 @@
+//配置别名,解决项目中使用@作为路径别名，导致vscode找不到路径无法跳转的问题
 {
     "compilerOptions": {
         "baseUrl": ".",

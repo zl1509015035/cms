@@ -1,3 +1,5 @@
+// 工程配置文件 类似于yml
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path' //导入 node.js path
