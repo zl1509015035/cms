@@ -28,6 +28,10 @@ const routes = [
         component: () => import("@/views/admin/administrator/add.vue"),
       },
       {
+        path: "administrator/edit", // http://localhost:5173/admin/administrator/edit
+        component: () => import("@/views/admin/administrator/edit.vue"),
+      },
+      {
         path: "administrator/list", // http://localhost:5173/admin/administrator/list
         component: () => import("@/views/admin/administrator/list.vue"),
       },

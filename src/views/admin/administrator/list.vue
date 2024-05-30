@@ -2,7 +2,9 @@
 import {reactive, onMounted} from "vue";
 import AxiosUtil from "@/Utils/AxiosUtil.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {useRouter} from "vue-router";
 
+const router = useRouter()
 
 const data = reactive({
   list: []
@@ -66,6 +68,11 @@ const del = async (row) => {
     console.log("err:", err)
   }
 }
+
+//编辑
+const edit = (row) => {
+  router.push({path: '/admin/administrator/edit', query: {id: row.id}})
+}
 </script>
 
 <template>
@@ -77,7 +84,7 @@ const del = async (row) => {
 
     <el-table-column label="操作" width="150">
       <template #default="scope">
-        <el-button size="small" type="primary">编辑</el-button>
+        <el-button size="small" type="primary" @click="edit(scope.row)">编辑</el-button>
         <el-button size="small" @click="del(scope.row)">删除</el-button>
       </template>
     </el-table-column>
