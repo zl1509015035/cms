@@ -121,6 +121,23 @@ li {
   overflow-y: auto;
 }
 
+/* color */
+.blue {
+  color: #1e9eff;
+}
+
+.green {
+  color: #15baaa;
+}
+
+.orange {
+  color: #feb801;
+}
+
+.red {
+  color: #f75a23;
+}
+
 
 /* 重写 ElementPlus 默认样式 */
 /* 表格 */
