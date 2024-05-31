@@ -26,7 +26,25 @@ const provideData = reactive({
   pageAdd: false,
   pageEdit: false
 })
+//向子孙组件提供数据
 provide("provideData", provideData)
+
+const provideFuncGetList = () => {
+  CategoryAPI.getListByParentId(parentId)
+      .then(result => {
+        if (!result.status) {
+          ElMessage.error(result.msg)
+          return
+        }
+
+        data.path = result.data.path
+        data.list = result.data.list
+      }).catch(err => {
+    console.log("err:", err)
+  })
+}
+//向子孙组件提供方法
+provide("provideFuncGetList",provideFuncGetList)
 
 
 //在组建成功挂载到DOM并完成首次渲染后调用
@@ -89,6 +107,14 @@ watchEffect(() => {
 
     data.path = result.data.path
     data.list = result.data.list
+
+    //更新 provideData
+    if(data.path === null){
+      provideData.level = 1
+    }else{
+      provideData.level = data.path.length +1
+    }
+    provideData.parentId = parentId
   }).catch(err => {
     console.log("err:", err)
   })
@@ -125,7 +151,7 @@ const del = async (row) => {
 }
 
 //添加页
-const pageAdd = () =>{
+const pageAdd = () => {
   provideData.pageAdd = true
 }
 </script>
