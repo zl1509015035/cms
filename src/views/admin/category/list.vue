@@ -1,5 +1,5 @@
 <script setup>
-import {reactive,onMounted} from 'vue'
+import {reactive, onMounted, onUpdated} from 'vue'
 import {useRoute} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
@@ -34,6 +34,29 @@ onMounted(() => {
   }).catch(err => {
     console.log("err:", err)
   })
+})
+
+
+onUpdated(() => {
+  if (parentId != route.query.parent_id) {
+    parentId = route.query.parent_id
+    console.log(parentId)
+
+    CategoryAPI.getListByParentId(parentId).then(result => {
+
+      console.log(result)
+
+      if (!result.status) {
+        ElMessage.error(result.msg)
+        return
+      }
+
+      data.path = result.data.path
+      data.list = result.data.list
+    }).catch(err => {
+      console.log("err:", err)
+    })
+  }
 })
 
 const del = async (row) => {
@@ -99,7 +122,10 @@ const del = async (row) => {
     <!--    <el-table-column prop="name" label="名称"/>-->
     <el-table-column prop="name" label="名称">
       <template #default="scope">
-        <a :href="`/admin/category/list?parent_id=${scope.row.id}`" class="blue">{{ scope.row.name }}</a>
+        <!--        <a :href="`/admin/category/list?parent_id=${scope.row.id}`" class="blue">{{ scope.row.name }}</a>-->
+        <router-link :to="{path:'/admin/category/list',query:{parent_id:scope.row.id}}" class="blue">
+          {{ scope.row.name }}
+        </router-link>
       </template>
     </el-table-column>
     <!--    <el-table-column prop="status" label="状态" width="80"/>-->
