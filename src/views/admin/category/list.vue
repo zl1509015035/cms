@@ -1,8 +1,9 @@
 <script setup>
 import {reactive,onMounted} from 'vue'
 import {useRoute} from "vue-router";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
+import AxiosUtil from "@/Utils/AxiosUtil.js";
 
 //数据
 const data = reactive({
@@ -12,13 +13,12 @@ const data = reactive({
 
 //初始化
 const route = useRoute()
+//参数
+let parentId = route.query.parent_id
+console.log(parentId)
 
 //在组建成功挂载到DOM并完成首次渲染后调用
 onMounted(() => {
-
-  //参数
-  let parentId = route.query.parent_id
-  console.log(parentId)
 
   CategoryAPI.getListByParentId(parentId).then(result => {
 
@@ -34,8 +34,37 @@ onMounted(() => {
   }).catch(err => {
     console.log("err:", err)
   })
-
 })
+
+const del = async (row) => {
+  try {
+    await ElMessageBox.confirm('确认删除?', '标题', {
+      type: 'warning',
+      confirmButtonText: '确认',
+      cancelButtonText: '取消'
+    })
+
+    //删除
+    //let delResult = await AxiosDR.post('/api/adm/del',{id: row.id})
+    let delResult = await CategoryAPI.del(String(row.id))
+    if (!delResult.status) {
+      ElMessage.error(delResult.msg)
+      return
+    }
+
+    //重新获取列表
+    let getListResult = await CategoryAPI.getListByParentId(parentId)
+    if (!getListResult.status) {
+      ElMessage.error(getListResult.msg)
+      return
+    }
+
+    data.path = getListResult.data.path
+    data.list = getListResult.data.list //重置
+  } catch (err) {
+    console.log("err:", err)
+  }
+}
 
 </script>
 
@@ -85,7 +114,7 @@ onMounted(() => {
     <el-table-column label="操作" width="150">
       <template #default="scope">
         <el-button size="small" type="primary">编辑</el-button>
-        <el-button size="small">删除</el-button>
+        <el-button size="small" @click="del(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
