@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, onMounted, onUpdated} from 'vue'
+import {reactive, onMounted, onUpdated, watchEffect} from 'vue'
 import {useRoute} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
@@ -18,6 +18,7 @@ let parentId = route.query.parent_id
 console.log(parentId)
 
 //在组建成功挂载到DOM并完成首次渲染后调用
+/*
 onMounted(() => {
 
   CategoryAPI.getListByParentId(parentId).then(result => {
@@ -34,8 +35,9 @@ onMounted(() => {
   }).catch(err => {
     console.log("err:", err)
   })
-})
+})*/
 
+/*
 
 onUpdated(() => {
   if (parentId != route.query.parent_id) {
@@ -57,6 +59,27 @@ onUpdated(() => {
       console.log("err:", err)
     })
   }
+})
+*/
+
+watchEffect(() => {
+  parentId = route.query.parent_id
+  console.log("parentId:", parentId)
+
+  CategoryAPI.getListByParentId(parentId).then(result => {
+
+    console.log(result)
+
+    if (!result.status) {
+      ElMessage.error(result.msg)
+      return
+    }
+
+    data.path = result.data.path
+    data.list = result.data.list
+  }).catch(err => {
+    console.log("err:", err)
+  })
 })
 
 const del = async (row) => {
