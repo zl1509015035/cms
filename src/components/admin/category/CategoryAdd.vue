@@ -1,5 +1,8 @@
 <script setup>
-import { ref,reactive } from 'vue'
+import { ref,reactive,inject} from 'vue'
+
+const injectData = inject("provideData")
+console.log("injectData:",injectData)
 
 const data = reactive({ //数据
   name: '',
@@ -7,13 +10,16 @@ const data = reactive({ //数据
   status: '1'
 })
 
-const show = ref(true) //默认显示
+//默认显示
+const show = ref(true)
 
-const add = () => { //添加
+//添加
+const add = () => {
   console.log(data)
 }
 
-const close = () => { //关闭对话框
+//关闭对话框
+const close = () => {
   data.name = ''
   data.sort = '0'
   data.status = '1'
@@ -21,7 +27,7 @@ const close = () => { //关闭对话框
 </script>
 
 <template>
-  <el-dialog v-model="show" draggable @close="close" width="600" title="添加类别">
+  <el-dialog v-model="injectData.pageAdd" draggable @close="close" width="600" title="添加类别">
     <el-form label-width="80">
       <el-form-item label="名称">
         <el-input v-model="data.name" placeholder="请填写名称" />

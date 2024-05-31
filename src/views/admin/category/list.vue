@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, onMounted, onUpdated, watchEffect} from 'vue'
+import {reactive, onMounted, onUpdated, watchEffect, provide} from 'vue'
 import {useRoute} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
@@ -17,6 +17,17 @@ const route = useRoute()
 //参数
 let parentId = route.query.parent_id
 console.log(parentId)
+
+//跨组件通信 - 依赖注入
+const provideData = reactive({
+  id: 0,
+  level: 1,
+  parentId,
+  pageAdd: false,
+  pageEdit: false
+})
+provide("provideData", provideData)
+
 
 //在组建成功挂载到DOM并完成首次渲染后调用
 /*
@@ -113,6 +124,10 @@ const del = async (row) => {
   }
 }
 
+//添加页
+const pageAdd = () =>{
+  provideData.pageAdd = true
+}
 </script>
 
 <template>
@@ -133,7 +148,7 @@ const del = async (row) => {
   </el-breadcrumb>
 
   <!--  按钮-->
-  <el-button type="primary" size="small">添加类别</el-button>
+  <el-button type="primary" size="small" @click="pageAdd">添加类别</el-button>
 
   <!--  表格-->
   <el-table :data="data.list" border>
