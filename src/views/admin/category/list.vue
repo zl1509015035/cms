@@ -4,6 +4,7 @@ import {useRoute} from "vue-router";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
 import AxiosUtil from "@/Utils/AxiosUtil.js";
+import CategoryAdd from '@/components/admin/category/CategoryAdd.vue'
 
 //数据
 const data = reactive({
@@ -115,13 +116,8 @@ const del = async (row) => {
 </script>
 
 <template>
-  <!-- 面包屑
-  <el-breadcrumb separator="/">
-      <el-breadcrumb-item><a href="#"><el-icon><House /></el-icon></a></el-breadcrumb-item>
-      <el-breadcrumb-item><a href="#">类别</a></el-breadcrumb-item>
-      <el-breadcrumb-item><a href="#">前端</a></el-breadcrumb-item>
-  </el-breadcrumb>
-  -->
+  <CategoryAdd/>
+  <!-- 面包屑 -->
   <el-breadcrumb separator="/">
     <el-breadcrumb-item>
       <a href="/admin/category/list?parent_id=0">
