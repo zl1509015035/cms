@@ -1,7 +1,8 @@
 <script setup>
 import {ref, reactive, onMounted,watch} from 'vue'
 import ArticleAPI from "@/api/ArticleAPI.js";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
+import CategoryAPI from "@/api/CategoryAPI.js";
 
 //数据
 const data = reactive({
@@ -28,12 +29,49 @@ watch(page,(newValue,oldValue) =>{
 const currentChange = (newPage) => {
   console.log("当前页数", newPage)
   page.value = newPage
-  // funcPageList()
+  funcPageList()
 }
+
+//删除
+const del = (row) =>{
+  funcDel(String(row.id))
+}
+
+//工具栏 - 删除
+let selectedIdArr = []
+const selectionChange = (data) =>{
+  //重置
+  selectedIdArr = []
+
+  data.forEach((row) =>{
+    selectedIdArr.push(row.id)
+  })
+
+  console.log("selectedIdArr:",selectedIdArr)
+}
+
+const toolDel = () =>{
+  if(selectedIdArr.length == 0){
+    ElMessage.error("请勾选要删除的记录")
+    return
+  }
+
+  funcDel(String(selectedIdArr))
+}
+
 
 const funcPageList = () => {
 
   ArticleAPI.pageList(page.value, pageSize).then(result => {
+
+    //判空
+    if(result.data == null){
+      data.list = []
+      total.value = 0
+      return
+    }
+
+
     if (!result.status) {
       ElMessage.error(result.msg)
       return
@@ -48,6 +86,33 @@ const funcPageList = () => {
   })
 }
 
+const funcDel = async (id) =>{
+  try {
+    await ElMessageBox.confirm('确认删除?', '标题', {
+      type: 'warning',
+      confirmButtonText: '确认',
+      cancelButtonText: '取消'
+    })
+
+    //删除
+    let delResult = await ArticleAPI.del(id)
+    if (!delResult.status) {
+      ElMessage.error(delResult.msg)
+      return
+    }
+
+    //回到第一页
+    if(page.value != 1){
+      page.value = 1
+    }else{
+      //刷新页面
+      funcPageList()
+    }
+  } catch (err) {
+    console.log("err:", err)
+  }
+}
+
 
 </script>
 
@@ -58,11 +123,11 @@ const funcPageList = () => {
 
     <el-button type="primary"><el-icon><Edit/></el-icon></el-button>
 
-    <el-button type="primary"><el-icon><Delete/></el-icon></el-button>
+    <el-button type="primary" @click="toolDel"><el-icon><Delete/></el-icon></el-button>
   </el-button-group>
 
   <!-- 表格 -->
-  <el-table :data="data.list" border>
+  <el-table :data="data.list" @selection-change="selectionChange" border>
     <el-table-column type="selection" width="55"></el-table-column>
 
     <el-table-column prop="id" label="ID" width="80"/>
@@ -80,7 +145,7 @@ const funcPageList = () => {
     <el-table-column label="操作">
       <template #default="scope">
         <el-button size="small" type="primary">编辑</el-button>
-        <el-button size="small">删除</el-button>
+        <el-button size="small" @click="del(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
