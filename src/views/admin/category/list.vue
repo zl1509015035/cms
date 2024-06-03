@@ -5,6 +5,7 @@ import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
 import AxiosUtil from "@/Utils/AxiosUtil.js";
 import CategoryAdd from '@/components/admin/category/CategoryAdd.vue'
+import CategoryEdit from '@/components/admin/category/CategoryEdit.vue'
 
 //数据
 const data = reactive({
@@ -154,10 +155,17 @@ const del = async (row) => {
 const pageAdd = () => {
   provideData.pageAdd = true
 }
+
+//编辑页
+const pageEdit = (row) => {
+  provideData.pageEdit = true
+  provideData.id = row.id
+}
 </script>
 
 <template>
   <CategoryAdd/>
+  <CategoryEdit/>
   <!-- 面包屑 -->
   <el-breadcrumb separator="/">
     <el-breadcrumb-item>
@@ -199,7 +207,7 @@ const pageAdd = () => {
 
     <el-table-column label="操作" width="150">
       <template #default="scope">
-        <el-button size="small" type="primary">编辑</el-button>
+        <el-button size="small" type="primary" @click="pageEdit(scope.row)">编辑</el-button>
         <el-button size="small" @click="del(scope.row)">删除</el-button>
       </template>
     </el-table-column>
