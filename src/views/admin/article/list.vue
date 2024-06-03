@@ -1,24 +1,54 @@
 <script setup>
-import {ref, reactive} from 'vue'
+import {ref, reactive, onMounted,watch} from 'vue'
+import ArticleAPI from "@/api/ArticleAPI.js";
+import {ElMessage} from "element-plus";
 
 //数据
 const data = reactive({
-  list: [
-    {id: '1', title: 'Ubuntu从入门到精通', url: 'dengruicode.com', sort: '0', create_time: '2023-06-25'},
-    {id: '2', title: '40分钟学会ElementPlus', url: 'www.dengruicode.com', sort: '0', create_time: '2023-06-25'},
-    {id: '3', title: '3小时学会Vue3', url: 'dengruicode.com', sort: '0', create_time: '2023-06-26'},
-    {id: '4', title: 'ES6从入门到精通', url: 'www.dengruicode.com', sort: '0', create_time: '2023-06-26'}
-  ]
+  list: []
 })
 
 const page = ref(1) //当前页 默认第1页
-const total = ref(20) //总记录数
+const total = ref(0) //总记录数
 let pageSize = Number(import.meta.env.VITE_PAGE_SIZE) //每页显示记录数
+
+onMounted(() => {
+  funcPageList()
+})
+
+watch(page,(newValue,oldValue) =>{
+  console.log("oldValue:",oldValue,"newValue:",newValue)
+
+  if(oldValue != newValue){
+    funcPageList()
+  }
+})
 
 //获取新页码
 const currentChange = (newPage) => {
-  console.log(newPage)
+  console.log("当前页数", newPage)
+  page.value = newPage
+  // funcPageList()
 }
+
+const funcPageList = () => {
+
+  ArticleAPI.pageList(page.value, pageSize).then(result => {
+    if (!result.status) {
+      ElMessage.error(result.msg)
+      return
+    }
+
+    //更新条数
+    data.list = result.data.list
+    //设置总记录数
+    total.value = result.data.pages.total
+  }).catch(err => {
+    console.log("err:", err)
+  })
+}
+
+
 </script>
 
 <template>
