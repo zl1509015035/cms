@@ -40,6 +40,11 @@ const routes = [
         path: "category/list", // http://localhost:5173/admin/category/list
         component: () => import("@/views/admin/category/list.vue"),
       },
+      //文章管理
+      {
+        path: "article/list", // http://localhost:5173/admin/article/list
+        component: () => import("@/views/admin/article/list.vue"),
+      }
     ],
   },
 ];

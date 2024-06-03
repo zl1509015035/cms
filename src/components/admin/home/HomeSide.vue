@@ -17,10 +17,20 @@
             </el-menu-item-group>
         </el-sub-menu>
 
+        <!--类别管理-->
         <el-menu-item index="/admin/category/list?parent_id=0">
             <el-icon><Files /></el-icon>类别管理
         </el-menu-item>
 
+      <!-- 文章管理 -->
+      <el-sub-menu index = "/admin/article">
+        <template #title>
+          <el-icon><Document/></el-icon>文件管理
+        </template>
+        <el-menu-item-group>
+          <el-menu-item index="admin/article/list">文章列表</el-menu-item>
+        </el-menu-item-group>
+      </el-sub-menu>
     </el-menu>
 
 </div>
