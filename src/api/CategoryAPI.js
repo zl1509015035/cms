@@ -10,6 +10,11 @@ const getListByParentId = (parent_id) => {
     return AxiosUtil.get(`/api/category/getListByParentId?parent_id=${parent_id}`)
 }
 
+//获取列表 -all
+const getAllById = (id) =>{
+    return AxiosUtil.get(`/api/category/list?id=${id}`)
+}
+
 //添加
 const add = (data) => {
     return AxiosUtil.post('/api/category/add',data)
@@ -25,4 +30,4 @@ const del = (id) => {
     return AxiosUtil.post("/api/category/del",{id: id})
 }
 
-export default { getById,getListByParentId,add,edit,del }
+export default { getById,getListByParentId,getAllById,add,edit,del }

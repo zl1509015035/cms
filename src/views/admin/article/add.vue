@@ -1,5 +1,10 @@
 <script setup>
-    import { reactive } from 'vue'
+    import { reactive,onMounted} from 'vue'
+    import {ElMessage, ElMessageBox} from "element-plus";
+    import CategoryAPI from "@/api/CategoryAPI.js";
+    import TimeUtil from "@/Utils/TimeUtil.js";
+    import ArticleAPI from "@/api/ArticleAPI.js";
+
 
     //数据
     const data = reactive({
@@ -13,17 +18,49 @@
     })
 
     const category = reactive({ //下拉框
-        list: [
-            { id: '1', parent_id: '0', name: '类别', level: '1', level_padding: '', sort: '0', status: '1' },
-            { id: '2', parent_id: '1', name: '前端', level: '2', level_padding: '···', sort: '0', status: '1' },
-            { id: '3', parent_id: '1', name: '后端', level: '2', level_padding: '···', sort: '0', status: '1' },
-            { id: '4', parent_id: '1', name: '服务端', level: '2', level_padding: '···', sort: '0', status: '1' }
-        ]
+        list: []
+    })
+
+    //在组建成功挂载DOM并首次完成渲染后调用
+    onMounted(()=>{
+      //获取类别列表
+      CategoryAPI.getAllById(import.meta.env.VITE_CATEGORY_ID).then(result =>{
+        if(!result.status){
+          ElMessage.error(result.msg)
+          return
+        }
+
+        category.list = result.data
+      })
     })
 
     //添加
     const add = () => {
         console.log(data)
+
+      if(data.category_id == ''){
+        ElMessage.error("请选择类别")
+        return
+      }
+
+      if(data.title == ''){
+        ElMessage.error("请填写标题")
+        return
+      }
+
+      //添加当前时间
+      data.create_time = TimeUtil.now()
+
+      ArticleAPI.add(data).then(result => {
+        if(!result.status) {
+          ElMessage.error(result.msg)
+          return
+        }
+
+        ElMessage.success("添加成功")
+      }).catch(err =>{
+        console.log("err:",err)
+      })
     }
 
     //重置
@@ -42,7 +79,7 @@
     <el-form label-width="80" style="width: 400px;">
         <el-form-item label="类别">
             <el-select v-model="data.category_id" placeholder="请选择">
-                <el-option v-for="value in category.list" :value="value.id" :label="value.level_padding + value.name" :key="value.id" />
+                <el-option v-for="value in category.list" :value="String(value.id)" :label="value.level_padding + value.name" :key="value.id" />
             </el-select>
         </el-form-item>
 
