@@ -8,13 +8,10 @@ import {reactive, onMounted, shallowRef, onBeforeUnmount} from 'vue'
     //wangeditor --- start
     import '@wangeditor/editor/dist/css/style.css' //导入wangeditor样式
     import '@/assets/admin/css/wangEditor.css'//导入自定义样式
+    import wangEditor from "@/assets/admin/js/wangEditor.js";
     import {Editor,Toolbar} from "@wangeditor/editor-for-vue";
 
     const editorRef = shallowRef() //shallowRef仅提供一层浅层响应，而ref那提供深层嵌套的响应性
-
-    //配置
-    const toolbarConfig = {}
-    const editorConfig = {}
 
     const editorInit = (editor) => { //编辑器初始化完成时的回调函数
       editorRef.value = editor
@@ -120,8 +117,8 @@ import {reactive, onMounted, shallowRef, onBeforeUnmount} from 'vue'
 
         <el-form-item label="内容" style="width: 1000px;">
             <div class="wangEditor">
-              <Toolbar class="toolbar" :editor="editorRef" :defaultConfig="toolbarConfig"/>
-              <Editor class="content" v-model="data.content" :defaultConfig="editorConfig" @onCreated="editorInit"/>
+              <Toolbar class="toolbar" :editor="editorRef" :defaultConfig="wangEditor.toolbarConfig"/>
+              <Editor class="content" v-model="data.content" :defaultConfig="wangEditor.editorConfig" @onCreated="editorInit"/>
             </div>
         </el-form-item>
 
