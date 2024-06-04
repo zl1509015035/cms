@@ -1,9 +1,31 @@
 <script setup>
-    import { reactive,onMounted} from 'vue'
+import {reactive, onMounted, shallowRef, onBeforeUnmount} from 'vue'
     import {ElMessage, ElMessageBox} from "element-plus";
     import CategoryAPI from "@/api/CategoryAPI.js";
     import TimeUtil from "@/Utils/TimeUtil.js";
     import ArticleAPI from "@/api/ArticleAPI.js";
+
+    //wangeditor --- start
+    import '@wangeditor/editor/dist/css/style.css' //导入wangeditor样式
+    import '@/assets/admin/css/wangEditor.css'//导入自定义样式
+    import {Editor,Toolbar} from "@wangeditor/editor-for-vue";
+
+    const editorRef = shallowRef() //shallowRef仅提供一层浅层响应，而ref那提供深层嵌套的响应性
+
+    //配置
+    const toolbarConfig = {}
+    const editorConfig = {}
+
+    const editorInit = (editor) => { //编辑器初始化完成时的回调函数
+      editorRef.value = editor
+    }
+
+    onBeforeUnmount(() =>{
+      const editor = editorRef.value
+      if(editor){
+        editor.destroy()
+      }
+    })
 
 
     //数据
@@ -52,6 +74,7 @@
       data.create_time = TimeUtil.now()
 
       ArticleAPI.add(data).then(result => {
+        console.log("addResult:",result)
         if(!result.status) {
           ElMessage.error(result.msg)
           return
@@ -95,8 +118,11 @@
             <el-input v-model="data.url" />
         </el-form-item>        
 
-        <el-form-item label="内容">
-            <el-input type="textarea" v-model="data.content" rows="4" />
+        <el-form-item label="内容" style="width: 1000px;">
+            <div class="wangEditor">
+              <Toolbar class="toolbar" :editor="editorRef" :defaultConfig="toolbarConfig"/>
+              <Editor class="content" v-model="data.content" :defaultConfig="editorConfig" @onCreated="editorInit"/>
+            </div>
         </el-form-item>
 
         <el-form-item label="排序">
