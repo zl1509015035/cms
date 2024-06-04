@@ -23,13 +23,15 @@
         </el-menu-item>
 
       <!-- 文章管理 -->
-      <el-sub-menu index = "/admin/article">
+      <el-sub-menu index = "/article">
         <template #title>
           <el-icon><Document/></el-icon>文件管理
         </template>
         <el-menu-item-group>
-          <el-menu-item index="admin/article/list">文章列表</el-menu-item>
+          <el-menu-item index="/admin/article/add">添加文章</el-menu-item>
+          <el-menu-item index="/admin/article/list">文章列表</el-menu-item>
         </el-menu-item-group>
+
       </el-sub-menu>
     </el-menu>
 
