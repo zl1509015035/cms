@@ -1,8 +1,12 @@
 <script setup>
 import {ref, reactive, onMounted,watch} from 'vue'
 import ArticleAPI from "@/api/ArticleAPI.js";
+import { useRoute,useRouter } from 'vue-router'
 import {ElMessage, ElMessageBox} from "element-plus";
 import CategoryAPI from "@/api/CategoryAPI.js";
+
+//初始化
+const router = useRouter()
 
 //数据
 const data = reactive({
@@ -31,6 +35,35 @@ const currentChange = (newPage) => {
   page.value = newPage
   funcPageList()
 }
+
+//编辑
+const edit = (row) => {
+  //console.log("row:", row)
+
+  router.push({ path: '/admin/article/edit', query: { id: row.id } })
+}
+
+//工具栏 - 编辑
+const toolEdit = () => {
+  if(selectedIdArr.length == 0){
+    ElMessage.error("请勾选需要编辑记录")
+    return
+  }
+
+  if(selectedIdArr.length != 1){
+    ElMessage.error("请勾选单条记录")
+    return
+  }
+
+  router.push({ path: '/admin/article/edit', query: { id: String(selectedIdArr) } })
+}
+
+//工具栏 - 添加
+const toolAdd = () => {
+  router.push("/admin/article/add")
+}
+
+
 
 //删除
 const del = (row) =>{
@@ -119,9 +152,9 @@ const funcDel = async (id) =>{
 <template>
   <!-- 工具栏 -->
   <el-button-group size="small">
-    <el-button type="primary"><el-icon><Plus/></el-icon></el-button>
+    <el-button type="primary" @click="toolAdd"><el-icon><Plus/></el-icon></el-button>
 
-    <el-button type="primary"><el-icon><Edit/></el-icon></el-button>
+    <el-button type="primary" @click="toolEdit"><el-icon><Edit/></el-icon></el-button>
 
     <el-button type="primary" @click="toolDel"><el-icon><Delete/></el-icon></el-button>
   </el-button-group>
@@ -144,7 +177,7 @@ const funcDel = async (id) =>{
 
     <el-table-column label="操作">
       <template #default="scope">
-        <el-button size="small" type="primary">编辑</el-button>
+        <el-button size="small" type="primary" @click="edit(scope.row)">编辑</el-button>
         <el-button size="small" @click="del(scope.row)">删除</el-button>
       </template>
     </el-table-column>

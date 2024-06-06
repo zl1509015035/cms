@@ -46,16 +46,16 @@ const edit = () => {
   }
 
   data.id = id
-  if(data.password == ''){
+  if (data.password == '') {
     delete data.password
   }
 
-  AxiosUtil.post('/api/adm/edit',data)
+  AxiosUtil.post('/api/adm/edit', data)
       .then(result => {
 
         debugger
 
-        if(!result.status){
+        if (!result.status) {
           ElMessage.error(result.msg)
           return
         }
