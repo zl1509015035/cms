@@ -31,6 +31,7 @@ import {reactive, onMounted, shallowRef, onBeforeUnmount} from 'vue'
         title: '',
         author: 'juanwang',
         url: 'juanwang.com',
+        thumbnail:'',
         content: '',
         sort: '0',
         status: '1'
@@ -93,6 +94,29 @@ import {reactive, onMounted, shallowRef, onBeforeUnmount} from 'vue'
         data.sort = '0'
         data.status = '1'
     }
+
+    //上传缩略图  --- start
+    let apiUrl = import.meta.env.VITE_API_URL
+
+    const beforeUpload = file => {
+      if(file.type != 'image/jpeg'){
+        ElMessage.error('请上传jpg格式图片')
+        return false
+      }
+
+      if(file.size / 1024 /1024 > 2){
+        ElMessage.error('图片大小不能超过2MB')
+        return false
+      }
+      return true
+    }
+
+    const uploadSuccess = result =>{
+      console.log(result)
+      data.thumbnail = apiUrl+"/"+result.data.filePath
+
+      console.log(data.thumbnail)
+    }
 </script>
 
 <template>
@@ -113,7 +137,21 @@ import {reactive, onMounted, shallowRef, onBeforeUnmount} from 'vue'
 
         <el-form-item label="作者网站">
             <el-input v-model="data.url" />
-        </el-form-item>        
+        </el-form-item>
+
+        <el-form-item label="缩略图">
+          <el-upload :action="`${apiUrl}/api/article/uploadImg`"
+                     :before-upload="beforeUpload"
+                     :on-success="uploadSuccess"
+                     :show-file-list="false">
+
+            <img v-if="data.thumbnail" :src="data.thumbnail" style="width: 180px;"/>
+            <el-icon v-else><Plus/></el-icon>
+
+          </el-upload>
+        </el-form-item>
+
+
 
         <el-form-item label="内容" style="width: 1000px;">
             <div class="wangEditor">
