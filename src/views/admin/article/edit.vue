@@ -105,7 +105,7 @@ const uploadSuccess = result => {
 }
 //上传缩略图 --- end
 
-//添加
+//编辑
 const edit = () => {
   //console.log(data)
 
@@ -193,8 +193,8 @@ const back = () => {
         </el-form-item>
 
         <el-form-item>
-            <el-button type="primary" @click="add">添加</el-button>
-            <el-button @click="reset">重置</el-button>
+            <el-button type="primary" @click="edit">编辑</el-button>
+            <el-button @click="back">返回</el-button>
         </el-form-item>
     </el-form>
 </template>
