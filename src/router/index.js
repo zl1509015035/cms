@@ -54,6 +54,11 @@ const routes = [
       {
         path: "article/list", // http://localhost:5173/admin/article/list
         component: () => import("@/views/admin/article/list.vue"),
+      },
+      //导航管理
+      {
+        path: "nav/list",   // http://localhost:5173/admin/nav/list
+        component: () => import("@/views/admin/nav/list.vue")
       }
     ],
   },

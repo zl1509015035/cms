@@ -33,6 +33,11 @@
         </el-menu-item-group>
 
       </el-sub-menu>
+
+      <!--类别管理-->
+      <el-menu-item index="/admin/nav/list?parent_id=0">
+        <el-icon><Guide /></el-icon>导航管理
+      </el-menu-item>
     </el-menu>
 
 </div>
