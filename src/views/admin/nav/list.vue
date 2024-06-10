@@ -3,19 +3,17 @@ import {reactive,onMounted,onUpdated} from 'vue'
 import {useRoute} from "vue-router";
 import {ElMessage,ElMessageBox} from "element-plus";
 import NavAPI from "@/api/NavAPI.js";
+import {useNavStore} from "@/stores/admin/nav.js";
+import NavAdd from "@/components/admin/nav/NavAdd.vue";
 
 //初始化
 const route = useRoute()
+const navStore = useNavStore()
 
 //参数
 let parentId = route.query.parent_id
 console.log(parentId)
 
-//数据
-const data = reactive({
-  path: [],
-  list: []
-})
 
 //在组件成功挂载到DOM并完成首次渲染后调用
 onMounted(() => {
@@ -32,6 +30,11 @@ onUpdated(() => {
   }
 })
 
+const pageAdd = () =>{
+  console.log(navStore.data)
+  navStore.data.pageAdd = true
+}
+
 
 const funcGetList = () => { //func - 获取列表
   NavAPI.getListByParentId(parentId).then(result => {
@@ -41,8 +44,10 @@ const funcGetList = () => { //func - 获取列表
       return
     }
 
-    data.path = result.data.path //重置
-    data.list = result.data.list
+    navStore.listData.path = result.data.path //重置
+    navStore.listData.list = result.data.list
+
+    navStore.update(data.path,parentId)//更新
   }).catch(err => {
     console.log("err:", err)
   })
@@ -54,23 +59,24 @@ const funcFormatDate = (time) => { //func - 格式化日期
 </script>
 
 <template>
+  <NavAdd/>
   <!-- 面包屑 -->
   <el-breadcrumb separator="/">
     <el-breadcrumb-item :to="{ path: '/admin/nav/list', query: { parent_id: 0 } }">
       <el-icon><House/></el-icon>
     </el-breadcrumb-item>
 
-    <el-breadcrumb-item v-for="value in data.path" :to="{path:'/admin/nav/list',query:{ parent_id: value.id}}"
+    <el-breadcrumb-item v-for="value in navStore.listData.path" :to="{path:'/admin/nav/list',query:{ parent_id: value.id}}"
                         :key="value.id">
       {{ value.name }}
     </el-breadcrumb-item>
   </el-breadcrumb>
 
   <!-- 按钮 -->
-  <el-button type="primary">添加导航</el-button>
+  <el-button type="primary" @click="pageAdd">添加导航</el-button>
 
   <!-- 表格 -->
-  <el-table :data="data.list" border>
+  <el-table :data="navStore.listData.list" border>
     <el-table-column prop="id" label="ID" width="60"/>
 
     <el-table-column prop="name" label="名称" width="100">
