@@ -5,6 +5,8 @@ import {ElMessage,ElMessageBox} from "element-plus";
 import NavAPI from "@/api/NavAPI.js";
 import {useNavStore} from "@/stores/admin/nav.js";
 import NavAdd from "@/components/admin/nav/NavAdd.vue";
+import NavEdit from "@/components/admin/nav/NavEdit.vue"
+
 
 //初始化
 const route = useRoute()
@@ -35,6 +37,12 @@ const pageAdd = () =>{
   navStore.data.pageAdd = true
 }
 
+const pageEdit = (row) =>{
+  navStore.data.id = row.id
+  navStore.data.pageEdit = true
+  console.log(navStore.data)
+}
+
 
 const funcGetList = () => { //func - 获取列表
   NavAPI.getListByParentId(parentId).then(result => {
@@ -60,6 +68,7 @@ const funcFormatDate = (time) => { //func - 格式化日期
 
 <template>
   <NavAdd/>
+  <NavEdit/>
   <!-- 面包屑 -->
   <el-breadcrumb separator="/">
     <el-breadcrumb-item :to="{ path: '/admin/nav/list', query: { parent_id: 0 } }">
@@ -113,7 +122,7 @@ const funcFormatDate = (time) => { //func - 格式化日期
 
     <el-table-column label="操作" width="150">
       <template #default="scope">
-        <el-button size="small" type="primary">编辑</el-button>
+        <el-button size="small" type="primary" @click="pageEdit(scope.row)">编辑</el-button>
         <el-button size="small">删除</el-button>
       </template>
     </el-table-column>
