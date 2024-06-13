@@ -44,9 +44,47 @@ const pageEdit = (row) =>{
 }
 
 
+//删除
+const del = async (row) =>{
+  try{
+    await ElMessageBox.confirm('确认删除?','标题',{
+      type:'warning',
+      confirmButtonText:'确认',
+      cancelButtonText:'取消'
+    })
+
+    //删除
+    let delResult = await NavAPI.del(String(row.id))
+    if(!delResult.status){
+      ElMessage.error(delResult.msg)
+      return
+    }
+
+    ElMessage.success("删除成功")
+
+    //重新获取列表
+    let getListResult = await NavAPI.getListByParentId(parentId)
+    if(getListResult.data == null){ //若没有数据则重置
+      navStore.listData.list = []
+      return
+    }
+
+    if(!getListResult.status){
+      ElMessage.error(getListResult.msg)
+      return
+    }
+
+    navStore.listData.list = getListResult.data.list //重置
+
+  }catch (err){
+    console.log("err:",err)
+  }
+}
+
+
 const funcGetList = () => { //func - 获取列表
   NavAPI.getListByParentId(parentId).then(result => {
-    //console.log(result)
+    console.log(result)
     if(!result.status){
       ElMessage.error(result.msg)
       return
@@ -55,7 +93,7 @@ const funcGetList = () => { //func - 获取列表
     navStore.listData.path = result.data.path //重置
     navStore.listData.list = result.data.list
 
-    navStore.update(data.path,parentId)//更新
+    navStore.update(result.data.path,parentId)//更新
   }).catch(err => {
     console.log("err:", err)
   })
@@ -123,7 +161,7 @@ const funcFormatDate = (time) => { //func - 格式化日期
     <el-table-column label="操作" width="150">
       <template #default="scope">
         <el-button size="small" type="primary" @click="pageEdit(scope.row)">编辑</el-button>
-        <el-button size="small">删除</el-button>
+        <el-button size="small" @click="del(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
